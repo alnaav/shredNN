@@ -24,6 +24,7 @@ class FullyConnectedLayer(Layer):
 
         self.z = np.zeros(out_len)
         self.a = np.zeros(out_len)
+        self.d = np.zeros(out_len)
         self.delta = np.zeros(out_len)
 
     def apply(self, vector):
@@ -31,11 +32,18 @@ class FullyConnectedLayer(Layer):
         self.a = self.activation.apply(self.z)
         return self.a
 
-    def calculate_prev_layer_error(self, delta):
-        return self.w.transpose().dot(delta)
+    def calc_prev_error(self):
+        return self.w.transpose().dot(self.delta)
 
-    def calculate_error(self, delta):
-        self.delta += (delta * self.activation.apply_derivative(self.z))
+    def calc_error(self, next_layer, target=None):
+        if next_layer is None:
+            self.delta = self.a - target
+        else:
+            self.delta = next_layer.calc_prev_error() * self.activation.apply_derivative(self.z)
+        return self.delta
+
+    def calc_dcost(self, next_layer):
+        self.d += next_layer.delta.dot(self.a.transpose())
 
     def require_connect(self, prev_layer):
         if isinstance(prev_layer, FullyConnectedLayer):

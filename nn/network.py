@@ -22,14 +22,11 @@ class NN(object):
 
 
     def fit(self, X, y):
-        delta = [0 in range(0, len(self.layers))]
+        predicted = self.apply(X)
 
-        a = [X]
-        for layer in self.layers:
-            a.append(layer.apply(a[-1]))
+        self.layers[-1].calc_error(None, y)
+        for i, layer in reversed(enumerate(self.layers[:-1])):
+            layer.calc_error(self.layers[i-1])
+            layer.calc_dcost(self.layers[i-1])
 
-        delta[-1] = a[-1] - y
-        for i, layer in reversed(enumerate(self.layers)):
-            d = layer.calculate_prev_error(delta[i])
-            delta[i-1] += self.layers[i-1].calculate_error(d)
 

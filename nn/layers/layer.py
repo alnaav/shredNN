@@ -9,11 +9,11 @@ class Layer(object):
         pass
 
     @abstractmethod
-    def calculate_error(self, delta):
+    def calc_error(self, delta):
         pass
 
     @abstractmethod
-    def calculate_prev_error(self, delta):
+    def calc_prev_error(self, delta):
         pass
 
     @abstractmethod
