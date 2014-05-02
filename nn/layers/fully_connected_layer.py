@@ -18,11 +18,6 @@ class FullyConnectedLayer(Layer):
         self.weights = weights
         self.scale = scale
 
-        self.z = np.zeros(size)
-        self.a = np.zeros(size)
-        self.d = np.zeros(size)
-        self.delta = np.zeros(size)
-
     def connect(self, prev_layer):
         require_type(prev_layer, Layer)
         if prev_layer is None:
@@ -45,19 +40,4 @@ class FullyConnectedLayer(Layer):
         self.b = self.b * scale_zoom - scale_bias
 
     def apply(self, x):
-        self.z = self.w.dot(x) + self.b
-        self.a = self.activation.apply(self.z)
-        return self.a
-
-    # def calc_prev_error(self, delta):
-    #     return self.w.transpose().dot(self.delta)
-    #
-    # def calc_error(self, next_layer, target=None):
-    #     if next_layer is None:
-    #         self.delta = self.a - target
-    #     else:
-    #         self.delta = next_layer.calc_prev_error() * self.activation.apply_derivative(self.z)
-    #     return self.delta
-    #
-    # def calc_dcost(self, next_layer):
-    #     self.d += next_layer.delta.dot(self.a.transpose())
+        return self.activation.apply(self.w.dot(x) + self.b)

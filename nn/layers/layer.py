@@ -15,10 +15,3 @@ class Layer(object):
     def apply(self, x):
         pass
 
-    # @abstractmethod
-    # def calc_error(self, delta):
-    #     pass
-    #
-    # @abstractmethod
-    # def calc_prev_error(self, delta):
-    #     pass

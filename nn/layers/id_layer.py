@@ -18,12 +18,3 @@ class IdLayer(Layer):
 
     def apply(self, x):
         return x
-
-    # def calc_prev_error(self, delta):
-    #     raise RuntimeError
-    #
-    # def calc_error(self, next_layer, target=None):
-    #     raise RuntimeError
-    #
-    # def calc_dcost(self, next_layer):
-    #     raise RuntimeError
