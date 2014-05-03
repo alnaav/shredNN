@@ -39,5 +39,10 @@ class FullyConnectedLayer(Layer):
         self.w = self.w * scale_zoom - scale_bias
         self.b = self.b * scale_zoom - scale_bias
 
+    # def apply(self, x):
+    #     return self.activation.apply(self.w.dot(x) + self.b)
+
     def apply(self, x):
-        return self.activation.apply(self.w.dot(x) + self.b)
+        z = x.dot(self.w.transpose())
+        z += self.b
+        return self.activation.apply(z)

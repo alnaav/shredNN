@@ -18,13 +18,24 @@ class NN(object):
         layer.connect(self.layers[-1])
         self.layers.append(layer)
 
-    def apply(self, vector):
-        if vector.size != self.input_size:
+    # def apply(self, vector):
+    #     if vector.size != self.input_size:
+    #         raise ValueError("Invalid vector size - expected: ({0}), got: ({1})".format(
+    #             self.input_size
+    #         ))
+    #
+    #     curr = vector
+    #     for layer in self.layers:
+    #         curr = layer.apply(curr)
+    #     return curr
+
+    def apply(self, features):
+        if features.shape[1] != self.input_size:
             raise ValueError("Invalid vector size - expected: ({0}), got: ({1})".format(
                 self.input_size
             ))
 
-        curr = vector
+        curr = features
         for layer in self.layers:
             curr = layer.apply(curr)
         return curr

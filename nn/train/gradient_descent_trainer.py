@@ -47,7 +47,6 @@ class GradientDescentTrainer(Trainer):
         for i in range(len(layers) - 1, 1, -1):
             prev = layers_data[i - 2]
             curr = layers_data[i - 1]
-
             prev.neuron_error = curr.neuron_error.dot(layers[i].w) * layers[i - 1].activation.apply_derivative(prev.z)
             self.calc_gradient(curr, prev.a, layers[i].w)
 
@@ -72,16 +71,30 @@ class GradientDescentTrainer(Trainer):
         return err + reg
 
     def train(self, nn, features, target, k):
-        self.__set_coeff__(features.shape[0])
+        samples_number = features.shape[0]
+        self.__set_coeff__(samples_number)
 
-        y = np.zeros((target.shape[0], k))
-        for i in range(0, y.shape[0]):
+        y = np.zeros((samples_number, k))
+        for i in range(0, samples_number):
             y[i, target[i]] = 1
 
-        cost = 100
-        for i in range(0, self.iteration_number):
-            cost = self.step(nn.layers, features, y)
-        print cost
+        batch_size = 100
+        batches_number = samples_number / batch_size
+        print "{} batches".format(batches_number)
+
+        sb = 0
+        for b in range(0, batches_number):
+            print "Processing {}th batch".format(b)
+
+            size = min(batch_size, samples_number - sb)
+            curr_x = features[sb:sb + size, :]
+            curr_y = y[sb:sb + size, :]
+
+            for i in range(0, self.iteration_number):
+                self.step(nn.layers, curr_x, curr_y)
+                if i % 1000 == 0:
+                    print "{} iterations done".format(i)
+
 
 
 
