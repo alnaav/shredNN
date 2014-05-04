@@ -1,5 +1,6 @@
-from nn.train.trainer import Trainer
 import numpy as np
+
+from nn.train.trainer import Trainer
 
 
 class LayerData:
@@ -78,22 +79,21 @@ class GradientDescentTrainer(Trainer):
         for i in range(0, samples_number):
             y[i, target[i]] = 1
 
-        batch_size = 100
-        batches_number = samples_number / batch_size
+        batch_size = 1000
+        batches_number = samples_number / batch_size + 1
         print "{} batches".format(batches_number)
 
-        sb = 0
-        for b in range(0, batches_number):
-            print "Processing {}th batch".format(b)
+        for i in range(0, self.iteration_number):
+            sb = 0
+            for b in range(0, batches_number):
+                size = min(batch_size, samples_number - sb)
+                self.__set_coeff__(size)
 
-            size = min(batch_size, samples_number - sb)
-            curr_x = features[sb:sb + size, :]
-            curr_y = y[sb:sb + size, :]
-
-            for i in range(0, self.iteration_number):
+                curr_x = features[sb:sb + size, :]
+                curr_y = y[sb:sb + size, :]
                 self.step(nn.layers, curr_x, curr_y)
-                if i % 1000 == 0:
-                    print "{} iterations done".format(i)
+            if i % 1000 == 0:
+                print "{} iterations done".format(i)
 
 
 

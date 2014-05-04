@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as p
 from sklearn import metrics
-from nn.activations import IdActivation, LogisticActivation
+
+from nn.activations import LogisticActivation
 from nn.layers import FullyConnectedLayer
 from nn.network import NN
 
@@ -10,7 +11,7 @@ data = p.read_csv(r'./data/train.csv')
 train_set = np.asarray(data)
 
 cv_factor = 1.0 / 10
-samples_len = 1000 #train_set.shape[0]
+samples_len = 10000 #train_set.shape[0]
 train_len = samples_len * (1 - cv_factor)
 cv_len = samples_len - train_len
 
@@ -22,8 +23,8 @@ target = train_set[:train_len, 0]
 cv_features = train_set[train_len:train_len + cv_len, 1:]
 cv_target = train_set[train_len:train_len + cv_len, 0]
 
-features = (features - 127) / 255
-cv_features = (cv_features - 127) / 255
+features = (features - 127.0) / 255.0
+cv_features = (cv_features - 127.0) / 255.0
 
 nn = NN(features.shape[1])
 
